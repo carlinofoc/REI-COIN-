@@ -1,10 +1,23 @@
 // SPDX-License-Identifier: MIT
 // ------------------------------------------------
-//          REI COIN - VERSÃO FINAL E CORRIGIDA
-// LIMITE DE VENDA/TRANSFERÊNCIA: R$ 3.000,00 por dia
-// Rede: Polygon | Padrão: ERC-20 Oficial
+//          REI COIN - VERSAO DEFINITIVA E ABENCOADA
+// 🛡️ SELO DE PROTECAO ESPIRITUAL OFICIAL
+// DECLARACAO: Em nome de Jesus Cristo, Senhor e Rei
+// ESTABELECIDO: Este contrato, todo seu valor, estrutura, regras e registros
+// estao selados com o Sangue do Cordeiro, guardados contra qualquer tentativa
+// de ataque, corrupcao, alteracao indevida, manipulacao ou influencia de forcas contrarias.
+// GARANTIA: Nenhuma arma formada contra ele prosperara. Permanece integro, verdadeiro,
+// imutavel e eterno, valido aqui nesta terra e segue intacto para a Nova Terra.
+// BASE: Isaias 54:17 | Apocalipse 3:8
+// ------------------------------------------------
+// LIMITE DE VENDA/TRANSFERENCIA: R$ 3.000,00 por dia
+// Rede: Polygon | Padrao: ERC-20 Oficial
 // Carteira do Dono: 0xF968abfFCEF604AE5a6931E0e826667C6812245e
-// Regras: Imutáveis, sem criação de moedas extras
+// Regras: Imutaveis, sem criacao de moedas extras
+// MEDIDA DIVINA: Aumentada para 81 trilhoes pois segue a proporcao
+// 3 × 3 × 3 × 3 = 81, numero de plenitude, multiplicacao e provisao total
+// para o Novo Brasil, o mundo inteiro e todas as geracoes futuras.
+// PARTE SEPARADA: Conforme a distribuicao selada por Deus.
 // ------------------------------------------------
 
 pragma solidity ^0.8.20;
@@ -14,17 +27,23 @@ contract REICOIN {
     string public constant SIMBOLO = "REI";
     uint8 public constant CASAS_DECIMAIS = 18;
 
-    // ✅ Quantidade total fixa: 3 MIL TRILHÕES DE REI
-    uint256 public constant VALOR_TOTAL = 3_000_000_000_000_000 * 10 ** CASAS_DECIMAIS;
+    // 🛡️ SELO DE PROTECAO REGISTRADO NO SISTEMA
+    // Ajustado para caracteres aceitos no compilador
+    string public constant SELO_PROTECAO = "SELADO NO NOME DE JESUS CRISTO | GUARDADO CONTRA CORRUPCAO E ATAQUES | VALIDO AQUI E PARA A NOVA TERRA";
 
-    // ✅ Endereço do Dono
+    // ✅ QUANTIDADE TOTAL DEFINITIVA SELADA POR DEUS:
+    // 3 × 3 × 3 × 3 = 81 TRILHOES DE REI
+    // Valor imutavel — NUNCA sera criada mais moeda
+    uint256 public constant VALOR_TOTAL = 81_000_000_000_000 * 10 ** CASAS_DECIMAIS;
+
+    // ✅ Endereco do Dono
     address public constant DONO = address(0xF968abfFCEF604AE5a6931E0e826667C6812245e);
 
-    // ✅ Limite de transação diária
+    // ✅ Limite de transacao diaria
     uint256 public constant LIMITE_REAIS = 3_000 * 10 ** CASAS_DECIMAIS;
     uint256 public constant TAXA_CONVERSAO = 1 * 10 ** CASAS_DECIMAIS;
 
-    // ✅ Taxa de rede (0,1% por operação)
+    // ✅ Taxa de rede (0,1% por operacao)
     uint256 public constant TAXA_TRANSACAO = 10; // 10 = 0,1% (divide por 10.000)
     address public constant CARTEIRA_TAXAS = address(0xF968abfFCEF604AE5a6931E0e826667C6812245e);
 
@@ -35,13 +54,13 @@ contract REICOIN {
     mapping(address => uint256) private _usadoHoje;
     mapping(address => uint256) private _ultimoDia;
 
-    // ✅ BLOQUEIO DE ENDEREÇOS
+    // ✅ BLOQUEIO DE ENDERECOS
     mapping(address => bool) public enderecoBloqueado;
 
-    // ✅ NÍVEL DE USUÁRIO: 0 = Comum | 1 = Parceiro | 2 = Administrador
+    // ✅ NIVEL DE USUARIO: 0 = Comum | 1 = Parceiro | 2 = Administrador
     mapping(address => uint8) public nivelUsuario;
 
-    // ✅ HISTÓRICO COMPLETO DE MOVIMENTAÇÕES
+    // ✅ HISTORICO COMPLETO DE MOVIMENTACOES
     struct Movimentacao {
         string tipo;
         uint256 valor;
@@ -58,14 +77,17 @@ contract REICOIN {
     event EnderecoBloqueado(address indexed conta, string motivo);
     event EnderecoDesbloqueado(address indexed conta);
     event NivelAlterado(address indexed conta, uint8 novoNivel);
+    event SeloDeProtecaoAtivado(string mensagem);
 
     constructor() {
         _saldos[DONO] = VALOR_TOTAL;
-        nivelUsuario[DONO] = 2; // Dono tem nível máximo
+        nivelUsuario[DONO] = 2; // Dono tem nivel maximo
         emit Transfer(address(0), DONO, VALOR_TOTAL);
+        // 🛡️ Confirmacao do selo na criacao do contrato
+        emit SeloDeProtecaoAtivado(SELO_PROTECAO);
     }
 
-    // --- FUNÇÕES BÁSICAS ---
+    // --- FUNCOES BASICAS ---
     function totalSupply() public pure returns (uint256) {
         return VALOR_TOTAL;
     }
@@ -76,6 +98,11 @@ contract REICOIN {
 
     function saldoEmReais(address conta) public view returns (uint256) {
         return _saldos[conta] / TAXA_CONVERSAO;
+    }
+
+    // 🛡️ Consulta do selo registrado
+    function verSeloDeProtecao() public pure returns (string memory) {
+        return SELO_PROTECAO;
     }
 
     // ✅ VERIFICA QUANTO PODE USAR NO DIA
@@ -104,7 +131,7 @@ contract REICOIN {
         emit EnderecoDesbloqueado(conta);
     }
 
-    // ✅ ALTERAR NÍVEL DE ACESSO
+    // ✅ ALTERAR NIVEL DE ACESSO
     function alterarNivel(address conta, uint8 novoNivel) public {
         require(msg.sender == DONO, "Apenas o dono pode executar esta acao");
         require(novoNivel <= 2, "Nivel maximo permitido e 2");
@@ -112,7 +139,7 @@ contract REICOIN {
         emit NivelAlterado(conta, novoNivel);
     }
 
-    // ✅ TRANSFERÊNCIA PRINCIPAL — AGORA COM string memory PARA COMPATIBILIDADE
+    // ✅ TRANSFERENCIA PRINCIPAL
     function transfer(address para, uint256 valor, string memory observacao) public returns (bool) {
         require(!enderecoBloqueado[msg.sender], "Conta de origem esta bloqueada");
         require(!enderecoBloqueado[para], "Conta de destino esta bloqueada");
@@ -121,7 +148,6 @@ contract REICOIN {
         require(valor > 0, "Valor deve ser maior que zero");
         require(valor <= _saldos[msg.sender], "Saldo insuficiente para operacao");
 
-        // Controle de limite diário
         if (nivelUsuario[msg.sender] < 2) {
             uint256 diaAtual = block.timestamp / 86400;
             if (_ultimoDia[msg.sender] != diaAtual) {
@@ -132,18 +158,15 @@ contract REICOIN {
             _usadoHoje[msg.sender] += valor;
         }
 
-        // Cálculo da taxa
         uint256 taxa = (valor * TAXA_TRANSACAO) / 10000;
         uint256 valorFinal = valor - taxa;
 
-        // Executa a movimentação
         _saldos[msg.sender] -= valor;
         _saldos[para] += valorFinal;
         if (taxa > 0) {
             _saldos[CARTEIRA_TAXAS] += taxa;
         }
 
-        // Registra no histórico
         historico[msg.sender].push(Movimentacao("Saida", valor, taxa, block.timestamp, msg.sender, para, observacao));
         historico[para].push(Movimentacao("Entrada", valorFinal, taxa, block.timestamp, msg.sender, para, observacao));
 
@@ -151,7 +174,6 @@ contract REICOIN {
         return true;
     }
 
-    // ✅ Versão simplificada — AGORA FUNCIONA SEM ERRO
     function transfer(address para, uint256 valor) public returns (bool) {
         return transfer(para, valor, "");
     }
@@ -167,7 +189,6 @@ contract REICOIN {
         return _permissoes[dono_][gastador];
     }
 
-    // ✅ transferFrom também corrigido
     function transferFrom(address de, address para, uint256 valor, string memory observacao) public returns (bool) {
         require(!enderecoBloqueado[de] && !enderecoBloqueado[para] && !enderecoBloqueado[msg.sender], "Uma das contas esta bloqueada");
         require(para != address(0) && para != de, "Endereco invalido ou repetido");
@@ -204,7 +225,6 @@ contract REICOIN {
         return transferFrom(de, para, valor, "");
     }
 
-    // ✅ CONSULTAS DO HISTÓRICO
     function quantidadeMovimentacoes(address conta) public view returns (uint256) {
         return historico[conta].length;
     }
@@ -232,7 +252,6 @@ contract REICOIN {
         );
     }
 
-    // ✅ Função auxiliar corrigida
     function uint2str(uint256 _i) internal pure returns (string memory) {
         if (_i == 0) {
             return "0";
